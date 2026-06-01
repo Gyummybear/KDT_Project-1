@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mineral Insight - 대시보드</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Pretendard", sans-serif;
+      }
+      .sidebar {
+        min-height: 100vh;
+        background-color: #0d233a;
+        color: #fff;
+      }
+      .sidebar .nav-link {
+        color: #a9b7c6;
+        margin-bottom: 5px;
+      }
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link.active {
+        color: #fff;
+        background-color: #1a365d;
+        border-radius: 5px;
+      }
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+      .bg-danger-subtle {
+        background-color: #ffe5e5;
+        color: #d32f2f;
+      }
+      .bg-warning-subtle {
+        background-color: #fff4e5;
+        color: #ed6c02;
+      }
+      .bg-success-subtle {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="d-flex">
+      <nav class="sidebar p-3" style="width: 250px">
+        <h4 class="fw-bold mb-4 text-white">Mineral Insight</h4>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html"
+              ><i class="bi bi-grid-1x2-fill me-2"></i> 대시보드</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="search.html"
+              ><i class="bi bi-search me-2"></i> 광물 검색</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              ><i class="bi bi-graph-up-arrow me-2"></i> 산업 영향 분석</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <main class="flex-grow-1 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h2 class="fw-bold mb-1">오늘의 광물 인사이트</h2>
+            <p class="text-muted mb-0">
+              주요 광물 가격 동향과 공급망 리스크를 한눈에 확인하세요.
+            </p>
+          </div>
+          <div class="text-muted small">2024.05.29 기준</div>
+        </div>
+
+        <h5 class="fw-bold mb-3">주요 광물 가격 동향</h5>
+        <div class="row g-3 mb-4">
+          <div class="col">
+            <div class="card h-100 p-3">
+              <div class="text-muted small fw-bold">리튬 (Lithium)</div>
+              <div class="d-flex align-items-end mt-2">
+                <h5 class="fw-bold mb-0 me-2">CNY 123,500 /t</h5>
+                <span class="text-danger small">+8.21%</span>
+              </div>
+              <div
+                class="mt-3 mb-2 text-center text-muted"
+                style="height: 40px; border-bottom: 1px dashed #ddd"
+              >
+                [스파크라인 차트 영역]
+              </div>
+              <div>
+                <span class="status-badge bg-danger text-white">위험</span>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100 p-3">
+              <div class="text-muted small fw-bold">니켈 (Nickel)</div>
+              <div class="d-flex align-items-end mt-2">
+                <h5 class="fw-bold mb-0 me-2">USD 18,450 /t</h5>
+                <span class="text-danger small">+3.12%</span>
+              </div>
+              <div
+                class="mt-3 mb-2 text-center text-muted"
+                style="height: 40px; border-bottom: 1px dashed #ddd"
+              >
+                [스파크라인 차트 영역]
+              </div>
+              <div>
+                <span class="status-badge bg-warning text-dark">주의</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="card p-3 h-100">
+              <h6 class="fw-bold">가격 추이 비교 (최근 6개월)</h6>
+              <div
+                class="bg-light w-100 mt-2 d-flex justify-content-center align-items-center"
+                style="height: 200px"
+              >
+                [라인 차트 렌더링 영역]
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card p-3 h-100">
+              <h6 class="fw-bold">공급망 리스크 지도</h6>
+              <div
+                class="bg-light w-100 mt-2 d-flex justify-content-center align-items-center"
+                style="height: 200px"
+              >
+                [지도 렌더링 영역]
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card p-3 h-100">
+              <h6 class="fw-bold">주요 뉴스 요약 (AI 요약)</h6>
+              <ul class="list-group list-group-flush mt-2">
+                <li class="list-group-item px-0 border-0">
+                  <span class="badge bg-danger-subtle me-1">니켈</span>
+                  <strong>인도네시아 니켈 수출 쿼터 축소 검토</strong><br />
+                  <small class="text-muted"
+                    >공급 감소 우려로 가격 상승세...</small
+                  >
+                </li>
+                <li class="list-group-item px-0 border-0">
+                  <span class="badge bg-danger-subtle me-1">리튬</span>
+                  <strong>칠레 리튬 생산 감소 전망</strong><br />
+                  <small class="text-muted"
+                    >주요 리튬 기업들의 생산 차질...</small
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

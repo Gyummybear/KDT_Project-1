@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mineral Insight - 광물 검색</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Pretendard", sans-serif;
+      }
+      .sidebar {
+        min-height: 100vh;
+        background-color: #0d233a;
+        color: #fff;
+      }
+      .sidebar .nav-link {
+        color: #a9b7c6;
+        margin-bottom: 5px;
+      }
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link.active {
+        color: #fff;
+        background-color: #1a365d;
+        border-radius: 5px;
+      }
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="d-flex">
+      <nav class="sidebar p-3" style="width: 250px">
+        <h4 class="fw-bold mb-4 text-white">Mineral Insight</h4>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html"
+              ><i class="bi bi-grid-1x2-fill me-2"></i> 대시보드</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="search.html"
+              ><i class="bi bi-search me-2"></i> 광물 검색</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <main class="flex-grow-1 p-4">
+        <h3 class="fw-bold mb-4">광물 데이터 검색</h3>
+
+        <div class="card p-4 mb-4">
+          <form action="/search" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3">
+              <label for="mineralSelect" class="form-label fw-bold"
+                >광물 선택</label
+              >
+              <select id="mineralSelect" class="form-select" name="mineral">
+                <option selected>전체</option>
+                <option value="lithium">리튬 (Lithium)</option>
+                <option value="nickel">니켈 (Nickel)</option>
+                <option value="aluminum">알루미늄 (Aluminum)</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="dateRange" class="form-label fw-bold"
+                >조회 기간</label
+              >
+              <div class="input-group">
+                <input type="date" class="form-control" name="start_date" />
+                <span class="input-group-text">~</span>
+                <input type="date" class="form-control" name="end_date" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+                style="background-color: #0d6efd"
+              >
+                조회하기
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card p-4">
+          <h6 class="fw-bold mb-3">조회 결과 (최근 데이터 기준)</h6>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle text-center">
+              <thead class="table-light">
+                <tr>
+                  <th>일자</th>
+                  <th>광물명</th>
+                  <th>단위</th>
+                  <th>가격</th>
+                  <th>전일대비 등락률</th>
+                  <th>리스크 수준</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>2024.05.29</td>
+                  <td>리튬 (Lithium)</td>
+                  <td>CNY/t</td>
+                  <td>123,500</td>
+                  <td class="text-danger">+8.21%</td>
+                  <td><span class="badge bg-danger">위험</span></td>
+                </tr>
+                <tr>
+                  <td>2024.05.29</td>
+                  <td>니켈 (Nickel)</td>
+                  <td>USD/t</td>
+                  <td>18,450</td>
+                  <td class="text-danger">+3.12%</td>
+                  <td><span class="badge bg-warning text-dark">주의</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
