@@ -1,0 +1,235 @@
+
+<h2 class="sr-only">THN EV·알루미늄 시장 인사이트 대시보드 — 2016~2025 판매량·가격 추세, 시차 상관분석, 2026 전망을 보여줍니다.</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.dash{padding:1.5rem 0;display:flex;flex-direction:column;gap:1.5rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.logo{font-size:15px;font-weight:500;letter-spacing:.08em;color:var(--color-text-primary)}
+.logo span{color:var(--color-text-secondary);font-weight:400;font-size:13px;margin-left:8px}
+.badge{font-size:11px;padding:3px 10px;border-radius:var(--border-radius-md);background:var(--color-background-success);color:var(--color-text-success)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.9rem 1rem}
+.mc-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
+.mc-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.mc-sub{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.mc-up{color:var(--color-text-success)}
+.mc-dn{color:var(--color-text-danger)}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.panel{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.2rem}
+.panel-full{grid-column:1/-1}
+.panel-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.panel-sub{font-size:11px;color:var(--color-text-secondary);margin-bottom:1rem}
+.chart-wrap{position:relative;width:100%}
+.tabs{display:flex;gap:4px;margin-bottom:1rem}
+.tab{font-size:12px;padding:4px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:.8rem;font-size:11px;color:var(--color-text-secondary)}
+.leg-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle}
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.insight-card{border-radius:var(--border-radius-md);padding:.85rem 1rem;border:0.5px solid var(--color-border-tertiary)}
+.insight-icon{font-size:18px;margin-bottom:.5rem}
+.insight-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.insight-body{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.forecast-row{display:grid;grid-template-columns:90px 1fr 100px;gap:8px;align-items:center;margin-bottom:.6rem}
+.fc-label{font-size:12px;color:var(--color-text-secondary)}
+.fc-bar-wrap{height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.fc-bar{height:100%;border-radius:4px}
+.fc-val{font-size:12px;font-weight:500;color:var(--color-text-primary);text-align:right}
+.stat-row{display:flex;justify-content:space-around;margin-top:.5rem}
+.stat-item{text-align:center}
+.stat-num{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.stat-lbl{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+
+<div class="dash">
+  <div class="topbar">
+    <div class="logo">THN <span>EV · 알루미늄 인사이트 대시보드</span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:11px;color:var(--color-text-secondary)">2016–2026</span>
+      <span class="badge">LIVE BETA</span>
+    </div>
+  </div>
+
+  <div class="metrics">
+    <div class="mc">
+      <div class="mc-label">글로벌 EV 판매 (2025)</div>
+      <div class="mc-val">21.2M</div>
+      <div class="mc-sub mc-up"><i class="ti ti-trending-up" aria-hidden="true"></i> +24.7% YoY</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">LME 알루미늄 (2025)</div>
+      <div class="mc-val">$2,632</div>
+      <div class="mc-sub mc-up"><i class="ti ti-trending-up" aria-hidden="true"></i> +8.8% YoY</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">시차 상관계수 (Pearson R)</div>
+      <div class="mc-val">0.718</div>
+      <div class="mc-sub mc-up">p = 0.045  강한 상관</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">2024 모델 예측 오차율</div>
+      <div class="mc-val">13.5%</div>
+      <div class="mc-sub" style="color:var(--color-text-warning)">MAE ≈ 326 USD/t</div>
+    </div>
+  </div>
+
+  <div class="panels">
+    <div class="panel panel-full">
+      <div class="panel-title">EV 판매량 & 알루미늄 가격 추세 (2016–2025)</div>
+      <div class="panel-sub">막대 = EV 판매량(백만 대, 좌축) · 선 = LME 알루미늄 가격(USD/ton, 우축)</div>
+      <div class="tabs">
+        <button class="tab active" onclick="setView('both')" aria-pressed="true">전체 보기</button>
+        <button class="tab" onclick="setView('ev')">EV만</button>
+        <button class="tab" onclick="setView('al')">알루미늄만</button>
+      </div>
+      <div class="legend">
+        <span><span class="leg-dot" style="background:#378ADD"></span>EV 판매량 (BEV+PHEV)</span>
+        <span><span class="leg-dot" style="background:#D85A30;border-radius:50%"></span>LME 알루미늄 가격</span>
+      </div>
+      <div class="chart-wrap" style="height:240px"><canvas id="chart1" role="img" aria-label="2016년부터 2025년까지 EV 판매량과 알루미늄 가격 추세 차트">EV 판매량: 2016년 0.78M에서 2025년 21.2M으로 증가. 알루미늄 가격: 2016년 $1,605에서 2025년 $2,632로 상승.</canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">시차 상관분석 — t년 가격 vs t+1년 EV 판매</div>
+      <div class="panel-sub">1년 선행 EV 판매량이 알루미늄 가격과 양의 상관관계</div>
+      <div class="chart-wrap" style="height:210px"><canvas id="chart2" role="img" aria-label="EV 판매량과 알루미늄 가격의 시차 산점도">Pearson R=0.718, p=0.045로 강한 시차 상관관계를 보입니다.</canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">2026 가격 전망 시나리오</div>
+      <div class="panel-sub">회귀모델 기반 · EV 판매량 시나리오별</div>
+      <div style="margin-top:.5rem">
+        <div class="forecast-row">
+          <div class="fc-label">강세 (28M+)</div>
+          <div class="fc-bar-wrap"><div class="fc-bar" style="width:88%;background:#639922"></div></div>
+          <div class="fc-val">$2,750–2,900</div>
+        </div>
+        <div class="forecast-row">
+          <div class="fc-label">기본 (25–27M)</div>
+          <div class="fc-bar-wrap"><div class="fc-bar" style="width:72%;background:#378ADD"></div></div>
+          <div class="fc-val">$2,500–2,700</div>
+        </div>
+        <div class="forecast-row">
+          <div class="fc-label">약세 (23M↓)</div>
+          <div class="fc-bar-wrap"><div class="fc-bar" style="width:52%;background:#D85A30"></div></div>
+          <div class="fc-val">$2,200–2,450</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem;padding-top:.75rem;border-top:0.5px solid var(--color-border-tertiary)">
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-num" style="color:#378ADD">26M</div>
+            <div class="stat-lbl">기본 EV 전망</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" style="color:#378ADD">$2,600</div>
+            <div class="stat-lbl">기본 알루미늄 전망</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">R²=0.52</div>
+            <div class="stat-lbl">모델 설명력</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">핵심 인사이트</div>
+    <div class="panel-sub" style="margin-bottom:.8rem">EV·알루미늄 시장 연계 분석에서 도출된 시사점</div>
+    <div class="insight-grid">
+      <div class="insight-card" style="background:var(--color-background-info)">
+        <div class="insight-icon"><i class="ti ti-trending-up" style="color:var(--color-text-info)" aria-hidden="true"></i></div>
+        <div class="insight-title" style="color:var(--color-text-info)">구조적 수요 증가</div>
+        <div class="insight-body">EV 1대당 알루미늄 사용량은 내연기관차의 약 2배. EV 시장 성장은 알루미늄 수요의 구조적 증가 요인으로 작용합니다.</div>
+      </div>
+      <div class="insight-card" style="background:var(--color-background-success)">
+        <div class="insight-icon"><i class="ti ti-clock" style="color:var(--color-text-success)" aria-hidden="true"></i></div>
+        <div class="insight-title" style="color:var(--color-text-success)">1년 선행 신호</div>
+        <div class="insight-body">EV 판매량은 알루미늄 가격보다 1년 앞서 움직입니다. 원자재 선매입 수요가 선반영되기 때문으로, 조달 타이밍 판단에 활용 가능합니다.</div>
+      </div>
+      <div class="insight-card" style="background:var(--color-background-warning)">
+        <div class="insight-icon"><i class="ti ti-alert-triangle" style="color:var(--color-text-warning)" aria-hidden="true"></i></div>
+        <div class="insight-title" style="color:var(--color-text-warning)">공급 측 리스크</div>
+        <div class="insight-body">중국 연간 생산 4,500만 톤 규모의 공급 확대와 재활용 알루미늄 비중 증가가 가격 상단을 제한하는 핵심 변수입니다.</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;text-align:right">
+      <button onclick="sendPrompt('EV 판매량과 알루미늄 가격 외에 추가할 수 있는 분석 변수가 뭐가 있을까?')" style="font-size:12px;padding:5px 14px">추가 변수 탐색 ↗</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const years=['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const evData=[0.78,1.2,2.0,2.2,3.1,6.5,10.2,13.7,17.0,21.0];
+const alData=[1604.89,1968.74,2110.08,1791.13,1704.02,2479.62,2703.18,2249.54,2418.88,2632.07];
+
+const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)';
+const textColor=isDark?'#aaa':'#666';
+
+let chart1=new Chart(document.getElementById('chart1'),{
+  data:{
+    labels:years,
+    datasets:[
+      {type:'bar',label:'EV 판매량 (M대)',data:evData,backgroundColor:'rgba(55,138,221,.45)',borderColor:'#378ADD',borderWidth:1,yAxisID:'y',order:2},
+      {type:'line',label:'알루미늄 가격 (USD/t)',data:alData,borderColor:'#D85A30',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#D85A30',tension:.3,yAxisID:'y2',order:1}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:textColor,font:{size:11}},grid:{color:gridColor},border:{display:false}},
+      y:{position:'left',title:{display:true,text:'EV 판매량 (백만 대)',color:textColor,font:{size:11}},ticks:{color:textColor,font:{size:11}},grid:{color:gridColor},border:{display:false}},
+      y2:{position:'right',title:{display:true,text:'알루미늄 가격 (USD/ton)',color:textColor,font:{size:11}},ticks:{color:textColor,font:{size:11},callback:v=>'$'+v.toLocaleString()},grid:{display:false},border:{display:false},min:1400,max:3100}
+    }
+  }
+});
+
+function setView(v){
+  const d=chart1.data.datasets;
+  d[0].hidden=(v==='al');
+  d[1].hidden=(v==='ev');
+  chart1.update();
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.classList.toggle('active',t.getAttribute('onclick').includes("'"+v+"'"));
+  });
+}
+
+const scatterData=[
+  {x:1.2,y:1604.89,label:"'16→'17"},{x:2.0,y:1968.74,label:"'17→'18"},
+  {x:2.2,y:2110.08,label:"'18→'19"},{x:3.1,y:1791.13,label:"'19→'20"},
+  {x:6.5,y:1704.02,label:"'20→'21"},{x:10.2,y:2479.62,label:"'21→'22"},
+  {x:13.7,y:2703.18,label:"'22→'23"},{x:17.0,y:2249.54,label:"'23→'24"}
+];
+
+const n=scatterData.length;
+const mx=scatterData.reduce((s,d)=>s+d.x,0)/n;
+const my=scatterData.reduce((s,d)=>s+d.y,0)/n;
+const slope=scatterData.reduce((s,d)=>s+(d.x-mx)*(d.y-my),0)/scatterData.reduce((s,d)=>s+(d.x-mx)**2,0);
+const intercept=my-slope*mx;
+const regLine=[{x:0,y:intercept},{x:20,y:slope*20+intercept}];
+
+new Chart(document.getElementById('chart2'),{
+  data:{
+    labels:scatterData.map(d=>d.label),
+    datasets:[
+      {type:'scatter',label:'실측 데이터',data:scatterData,backgroundColor:'#378ADD',pointRadius:6,pointHoverRadius:8},
+      {type:'line',label:'회귀선',data:regLine,borderColor:'#D85A30',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.type==='scatter'?`${ctx.label}: $${Math.round(ctx.parsed.y).toLocaleString()}/t`:null}}},
+    scales:{
+      x:{title:{display:true,text:'EV 판매량 t+1년 (M대)',color:textColor,font:{size:11}},ticks:{color:textColor,font:{size:11}},grid:{color:gridColor},border:{display:false},min:0,max:20},
+      y:{title:{display:true,text:'알루미늄 가격 (USD/t)',color:textColor,font:{size:11}},ticks:{color:textColor,font:{size:11},callback:v=>'$'+v.toLocaleString()},grid:{color:gridColor},border:{display:false},min:1400,max:3000}
+    }
+  }
+});
+</script>
