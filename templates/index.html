@@ -1,181 +1,318 @@
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mineral Insight - 대시보드</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
-    <style>
-      body {
-        background-color: #f8f9fa;
-        font-family: "Pretendard", sans-serif;
-      }
-      .sidebar {
-        min-height: 100vh;
-        background-color: #0d233a;
-        color: #fff;
-      }
-      .sidebar .nav-link {
-        color: #a9b7c6;
-        margin-bottom: 5px;
-      }
-      .sidebar .nav-link:hover,
-      .sidebar .nav-link.active {
-        color: #fff;
-        background-color: #1a365d;
-        border-radius: 5px;
-      }
-      .card {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      }
-      .status-badge {
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 4px;
-      }
-      .bg-danger-subtle {
-        background-color: #ffe5e5;
-        color: #d32f2f;
-      }
-      .bg-warning-subtle {
-        background-color: #fff4e5;
-        color: #ed6c02;
-      }
-      .bg-success-subtle {
-        background-color: #e8f5e9;
-        color: #2e7d32;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="d-flex">
-      <nav class="sidebar p-3" style="width: 250px">
-        <h4 class="fw-bold mb-4 text-white">Mineral Insight</h4>
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" href="index.html"
-              ><i class="bi bi-grid-1x2-fill me-2"></i> 대시보드</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="search.html"
-              ><i class="bi bi-search me-2"></i> 광물 검색</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"
-              ><i class="bi bi-graph-up-arrow me-2"></i> 산업 영향 분석</a
-            >
-          </li>
-        </ul>
-      </nav>
+{% extends "base.html" %} {% block title %}Aluminum EV Forecast Dashboard{%
+endblock %} {% block content %}
+<section class="page-head">
+  <div>
+    <h1>알루미늄 가격과 전기자동차 생산·판매량 예측</h1>
+  </div>
+</section>
 
-      <main class="flex-grow-1 p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <div>
-            <h2 class="fw-bold mb-1">오늘의 광물 인사이트</h2>
-            <p class="text-muted mb-0">
-              주요 광물 가격 동향과 공급망 리스크를 한눈에 확인하세요.
-            </p>
-          </div>
-          <div class="text-muted small">2024.05.29 기준</div>
-        </div>
+<section class="stat-grid four">
+  <a
+    class="stat-card stat-link"
+    href="https://www.komis.or.kr/Komis/RsrcPrice/BaseMetals?srchMnrkndUnqCd=MNRL0009&srchPrcCrtrSn=495"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span>알루미늄 실시간 가격</span>
+    <strong>{{ dashboard.stats.komis_live_price|number }}</strong>
+    <small>
+      {% if dashboard.stats.komis_live_available %} KOMIS {{
+      dashboard.stats.komis_live_basis }} · {{ dashboard.stats.komis_live_date
+      }} · 서버 {{ dashboard.stats.komis_live_server_date }} 기준 {% else %} KOMIS
+      실시간 가격 조회 실패 {% endif %}
+    </small>
+  </a>
+  <article class="stat-card">
+    <span>{{ dashboard.stats.next_forecast_year }}년 뉴스 보정 예측</span>
+    <strong id="scenario-adjusted-readout"
+      >${{ dashboard.stats.next_forecast_price_target|number }}</strong
+    >
+    <small
+      >기본
+      <span id="scenario-base-readout"
+        >${{ dashboard.stats.next_base_price_target|number }}</span
+      >
+      ×
+      <span id="scenario-card-multiplier"
+        >{{ dashboard.stats.news_multiplier|number }}</span
+      ></small
+    >
+  </article>
+  <a
+    class="stat-card stat-link ev-brand-card hyundai"
+    href="https://www.hyundai.com/kr/ko/e/service-membership/ev/hi-ev"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <strong class="brand-logo-lockup">
+      <img
+        class="brand-logo-image hyundai-logo-image"
+        src="{{ url_for('static', filename='images/hyundai-logo-official.png') }}"
+        alt="Hyundai"
+      />
+    </strong>
+    <small>현대자동차 EV 정보 바로가기</small>
+  </a>
+  <a
+    class="stat-card stat-link ev-brand-card kia"
+    href="https://www.kia.com/kr/vehicles/ev"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <strong class="brand-logo-lockup">
+      <img
+        class="brand-logo-image kia-logo-image"
+        src="{{ url_for('static', filename='images/kia-logo-official.svg') }}"
+        alt="Kia"
+      />
+    </strong>
+    <small>기아 EV 정보 바로가기</small>
+  </a>
+</section>
 
-        <h5 class="fw-bold mb-3">주요 광물 가격 동향</h5>
-        <div class="row g-3 mb-4">
-          <div class="col">
-            <div class="card h-100 p-3">
-              <div class="text-muted small fw-bold">리튬 (Lithium)</div>
-              <div class="d-flex align-items-end mt-2">
-                <h5 class="fw-bold mb-0 me-2">CNY 123,500 /t</h5>
-                <span class="text-danger small">+8.21%</span>
-              </div>
-              <div
-                class="mt-3 mb-2 text-center text-muted"
-                style="height: 40px; border-bottom: 1px dashed #ddd"
-              >
-                [스파크라인 차트 영역]
-              </div>
-              <div>
-                <span class="status-badge bg-danger text-white">위험</span>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 p-3">
-              <div class="text-muted small fw-bold">니켈 (Nickel)</div>
-              <div class="d-flex align-items-end mt-2">
-                <h5 class="fw-bold mb-0 me-2">USD 18,450 /t</h5>
-                <span class="text-danger small">+3.12%</span>
-              </div>
-              <div
-                class="mt-3 mb-2 text-center text-muted"
-                style="height: 40px; border-bottom: 1px dashed #ddd"
-              >
-                [스파크라인 차트 영역]
-              </div>
-              <div>
-                <span class="status-badge bg-warning text-dark">주의</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row g-3">
-          <div class="col-md-4">
-            <div class="card p-3 h-100">
-              <h6 class="fw-bold">가격 추이 비교 (최근 6개월)</h6>
-              <div
-                class="bg-light w-100 mt-2 d-flex justify-content-center align-items-center"
-                style="height: 200px"
-              >
-                [라인 차트 렌더링 영역]
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-3 h-100">
-              <h6 class="fw-bold">공급망 리스크 지도</h6>
-              <div
-                class="bg-light w-100 mt-2 d-flex justify-content-center align-items-center"
-                style="height: 200px"
-              >
-                [지도 렌더링 영역]
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card p-3 h-100">
-              <h6 class="fw-bold">주요 뉴스 요약 (AI 요약)</h6>
-              <ul class="list-group list-group-flush mt-2">
-                <li class="list-group-item px-0 border-0">
-                  <span class="badge bg-danger-subtle me-1">니켈</span>
-                  <strong>인도네시아 니켈 수출 쿼터 축소 검토</strong><br />
-                  <small class="text-muted"
-                    >공급 감소 우려로 가격 상승세...</small
-                  >
-                </li>
-                <li class="list-group-item px-0 border-0">
-                  <span class="badge bg-danger-subtle me-1">리튬</span>
-                  <strong>칠레 리튬 생산 감소 전망</strong><br />
-                  <small class="text-muted"
-                    >주요 리튬 기업들의 생산 차질...</small
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </main>
+<section class="slide-layout">
+  <article class="chart-panel slide-chart-main">
+    <div class="panel-title slide-heading">
+      <div>
+        <h2>
+          EV 판매량 & 알루미늄 가격 추세 (2016~{{ dashboard.stats.forecast_year
+          }})
+        </h2>
+      </div>
+      <!-- <span>막대 = EV 판매량 · 선 = 알루미늄 가격</span> -->
     </div>
-  </body>
-</html>
+    <div class="chart-wrap hero-chart">
+      <canvas data-chart-source="regression-chart"></canvas>
+    </div>
+  </article>
+  <aside class="slide-side-panel">
+    <div class="ev-use-panel">
+      <p class="side-label">추천 콘텐츠</p>
+      <h3>EV 차체 알루미늄 적용 부위</h3>
+      <div
+        class="ev-car-diagram"
+        aria-label="전기차 알루미늄 적용 부위 인포그래픽"
+      >
+        <div class="car-body"></div>
+        <div class="car-cabin"></div>
+        <div class="car-wheel front"></div>
+        <div class="car-wheel rear"></div>
+        <span class="part-line battery"></span>
+        <span class="part-label battery">배터리 팩 하우징</span>
+        <span class="part-line motor"></span>
+        <span class="part-label motor">모터 케이싱</span>
+        <span class="part-line body"></span>
+        <span class="part-label body">차체 경량화</span>
+      </div>
+      <p>
+        배터리 팩 하우징, 모터 케이싱, 주행거리 확보를 위한 차체 경량화에
+        알루미늄이 핵심 소재로 쓰입니다.
+      </p>
+      <strong class="ev-use-highlight">
+        전기차는 내연기관차 대비 알루미늄을 평균 25~27% 더 사용
+      </strong>
+      <small>CRU Group 기준, PHEV와 BEV의 대표 알루미늄 사용량 비교</small>
+    </div>
+  </aside>
+</section>
+
+<section class="scenario-layout">
+  <article class="scenario-panel">
+    <div class="scenario-head">
+      <div>
+        <h2>EV 생산·판매 대수와 뉴스 보정 기반 가격 전망</h2>
+      </div>
+    </div>
+
+    <div class="control-card">
+      <label for="ev-target-range"
+        >{{ dashboard.scenario_control.target_ev_year }}년 EV 생산·판매
+        가정</label
+      >
+      <div class="range-line">
+        <input
+          id="ev-target-range"
+          type="range"
+          aria-label="EV 생산·판매 대수"
+        />
+        <input
+          id="ev-target-input"
+          type="number"
+          aria-label="EV 생산·판매 대수 입력"
+        />
+        <span>백만 대</span>
+      </div>
+      <div class="control-meta">
+        <span
+          >현재 가정
+          <strong id="scenario-target-readout"
+            >{{ dashboard.stats.forecast_ev_target_million|number }}M</strong
+          ></span
+        >
+        <span
+          >재계산 CAGR
+          <strong id="scenario-cagr-readout"
+            >{{ dashboard.stats.recent_ev_cagr_pct|number }}%</strong
+          ></span
+        >
+      </div>
+    </div>
+
+    <div class="diff-panel">
+      <div class="panel-title compact-title">
+        <h3>
+          {{ dashboard.scenario_control.reference_price_year }}년 대비 미래 3년
+          가격 변동 차이
+        </h3>
+        <span>선택한 뉴스 보정 카테고리 기준</span>
+      </div>
+      <div class="forecast-diff-grid">
+        {% for year in dashboard.scenario_control.difference_years %}
+        <article class="diff-card">
+          <span>{{ year }}</span>
+          <strong id="diff-price-{{ year }}">-</strong>
+          <small>
+            <b id="diff-amount-{{ year }}">-</b>
+            <em id="diff-pct-{{ year }}">-</em>
+          </small>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="scenario-list">
+      <article class="forecast-card bull">
+        <div>
+          <p>강세 시나리오</p>
+          <h3 id="scenario-bull-ev">EV 생산·판매 확대</h3>
+        </div>
+        <strong id="scenario-bull-price">-</strong>
+        <span class="scenario-bar" id="scenario-bull-bar"></span>
+      </article>
+      <article class="forecast-card base">
+        <div>
+          <p>기준 시나리오</p>
+          <h3 id="scenario-base-ev">EV 기준 가정</h3>
+        </div>
+        <strong id="scenario-base-price">-</strong>
+        <span class="scenario-bar" id="scenario-base-bar"></span>
+      </article>
+      <article class="forecast-card bear">
+        <div>
+          <p>약세 시나리오</p>
+          <h3 id="scenario-bear-ev">EV 생산·판매 둔화</h3>
+        </div>
+        <strong id="scenario-bear-price">-</strong>
+        <span class="scenario-bar" id="scenario-bear-bar"></span>
+      </article>
+    </div>
+  </article>
+
+  <aside class="scenario-intel-grid">
+    <section class="issue-summary-panel">
+      <div class="category-control">
+        <label for="news-category-select">뉴스 보정 카테고리</label>
+        <select id="news-category-select" aria-label="뉴스 보정 카테고리 선택">
+          {% for category in dashboard.scenario_control.news_categories %}
+          <option
+            value="{{ category.id }}"
+            {% if category.id == dashboard.news_adjustment.top_category.id %}selected{% endif %}
+          >
+            {{ category.title }} · ×{{ category.multiplier|number }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="issue-summary-content">
+        <span>글로벌 이슈 요약</span>
+        <h3 id="issue-summary-title">
+          {{ dashboard.scenario_control.news_category_summary.title }}
+        </h3>
+        <p id="issue-summary-body">
+          {{ dashboard.scenario_control.news_category_summary.body }}
+        </p>
+        <p id="issue-summary-impact">
+          {{ dashboard.scenario_control.news_category_summary.impact }}
+        </p>
+        <small id="issue-summary-evidence">
+          {{ dashboard.scenario_control.news_category_summary.evidence }}
+        </small>
+        <em id="issue-summary-source">
+          {{ dashboard.scenario_control.news_category_summary.source }}
+        </em>
+      </div>
+    </section>
+
+    <section class="scenario-news-panel">
+      <div class="panel-title compact-title">
+        <h3>선택 카테고리 뉴스</h3>
+        <span id="scenario-news-count"
+          >{{ dashboard.news_adjustment.top_category.score }}</span
+        >
+      </div>
+      <div class="scenario-news-scroll" id="scenario-news-list">
+        {% for article in dashboard.news_adjustment.top_category.articles %}
+        <a
+          class="scenario-news-card"
+          href="{{ article.url }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <strong>{{ article.title }}</strong>
+          <span>
+            {{ article.source }} · {{ article.publisher }}{% if
+            article.published %} · {{ article.published }}{% endif %}
+          </span>
+          {% if article.summary %}<small>{{ article.summary }}</small>{% endif
+          %}
+        </a>
+        {% else %}
+        <p class="muted-text">최근 1주 기준으로 표시할 뉴스 기사가 없습니다.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </aside>
+</section>
+
+<section class="analysis-grid">
+  <article class="analysis-panel">
+    <h2>회귀 모델</h2>
+    <p>{{ dashboard.model.initial_equation }}</p>
+    <dl>
+      <div>
+        <dt>초기 학습</dt>
+        <dd>
+          가격 {{ dashboard.model.initial_price_years }} · EV {{
+          dashboard.model.initial_ev_years }}
+        </dd>
+      </div>
+      <div>
+        <dt>초기 R²</dt>
+        <dd>{{ dashboard.model.initial_r2|number }}</dd>
+      </div>
+      <div>
+        <dt>검증 MAPE</dt>
+        <dd>{{ dashboard.stats.validation_mape|number }}%</dd>
+      </div>
+      <div>
+        <dt>보완 회귀</dt>
+        <dd>
+          가격 {{ dashboard.model.calibrated_price_years }} · EV {{
+          dashboard.model.calibrated_ev_years }}
+        </dd>
+      </div>
+      <div>
+        <dt>보완 R²</dt>
+        <dd>{{ dashboard.model.calibrated_r2|number }}</dd>
+      </div>
+    </dl>
+  </article>
+</section>
+
+<script type="application/json" id="regression-chart">
+  {{ dashboard.regression_chart|tojson }}
+</script>
+<script type="application/json" id="scenario-control">
+  {{ dashboard.scenario_control|tojson }}
+</script>
+{% endblock %}
